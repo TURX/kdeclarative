@@ -142,5 +142,8 @@ else()
   message("In order to build KCoreAddons QML bindings you need KCoreAddons")
 endif()
 
+if(APPLE)
+  set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Build architectures for Mac OS X" FORCE)
+endif()
 
 kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
