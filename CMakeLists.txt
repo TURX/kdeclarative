@@ -36,6 +36,13 @@ find_package(KF5Notifications ${KF_DEP_VERSION} REQUIRED)
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050f02)
 add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x055100)
 
+if(APPLE)
+  option(OSX_FRAMEWORK "Build a Mac OS X Framework" ON)
+  set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Build architectures for Mac OS X" FORCE)
+else()
+  set(OSX_FRAMEWORK OFF)
+endif()
+
 #add_definitions(-Wno-deprecated)
 
 # Includes
@@ -51,7 +58,6 @@ set(EXCLUDE_DEPRECATED_BEFORE_AND_AT 0 CACHE STRING "Control the range of deprec
 option(BUILD_EXAMPLES "Build and install examples." OFF)
 option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
 add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
-
 
 # ECM setup
 ecm_setup_version(
@@ -140,10 +146,6 @@ if(KF5CoreAddons_FOUND)
   message("Dependencies for KCoreAddons QML bindings found; it will be built")
 else()
   message("In order to build KCoreAddons QML bindings you need KCoreAddons")
-endif()
-
-if(APPLE)
-  set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Build architectures for Mac OS X" FORCE)
 endif()
 
 kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
